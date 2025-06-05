@@ -329,7 +329,9 @@ object Parser {
             val playlistVideoList = mutableListOf<HanimeInfo>()
             val playlistName = it.selectFirst("div > div > h4")?.text()
             val playlistScroll = it.getElementById("playlist-scroll")
-            playlistScroll?.children()?.forEach { parent ->
+            playlistScroll
+                ?.select("div.related-watch-wrap:has(a.overlay):has(div.card-mobile-panel)")
+                ?.forEach { parent ->
                 val videoCode = parent.selectFirst("div > a")?.absUrl("href")?.toVideoCode()
                     .throwIfParseNull(Parser::hanimeVideoVer2.name, "videoCode")
                 val cardMobilePanel = parent.selectFirst("div[class^=card-mobile-panel]")
@@ -376,25 +378,27 @@ object Parser {
                     ?.getElementsByClass("home-rows-videos-div")
                     ?.firstOrNull() != null
             if (isSimplified) {
-                for (each in children) {
-                    val eachContent = each.selectFirst("a")
-                    val homeRowsVideosDiv =
-                        eachContent?.getElementsByClass("home-rows-videos-div")?.firstOrNull()
+                if (children != null) {
+                    for (each in children) {
+                        val eachContent = each.selectFirst("a")
+                        val homeRowsVideosDiv =
+                            eachContent?.getElementsByClass("home-rows-videos-div")?.firstOrNull()
 
-                    if (homeRowsVideosDiv != null) {
-                        val eachVideoCode = eachContent.absUrl("href").toVideoCode() ?: continue
-                        val eachCoverUrl = homeRowsVideosDiv.selectFirst("img")?.absUrl("src")
-                            .throwIfParseNull(Parser::hanimeVideoVer2.name, "eachCoverUrl")
-                        val eachTitle =
-                            homeRowsVideosDiv.selectFirst("div[class$=title]")?.text()
-                                .throwIfParseNull(Parser::hanimeVideoVer2.name, "eachTitle")
-                        relatedAnimeList.add(
-                            HanimeInfo(
-                                title = eachTitle, coverUrl = eachCoverUrl,
-                                videoCode = eachVideoCode,
-                                itemType = HanimeInfo.SIMPLIFIED
+                        if (homeRowsVideosDiv != null) {
+                            val eachVideoCode = eachContent.absUrl("href").toVideoCode() ?: continue
+                            val eachCoverUrl = homeRowsVideosDiv.selectFirst("img")?.absUrl("src")
+                                .throwIfParseNull(Parser::hanimeVideoVer2.name, "eachCoverUrl")
+                            val eachTitle =
+                                homeRowsVideosDiv.selectFirst("div[class$=title]")?.text()
+                                    .throwIfParseNull(Parser::hanimeVideoVer2.name, "eachTitle")
+                            relatedAnimeList.add(
+                                HanimeInfo(
+                                    title = eachTitle, coverUrl = eachCoverUrl,
+                                    videoCode = eachVideoCode,
+                                    itemType = HanimeInfo.SIMPLIFIED
+                                )
                             )
-                        )
+                        }
                     }
                 }
             } else {
