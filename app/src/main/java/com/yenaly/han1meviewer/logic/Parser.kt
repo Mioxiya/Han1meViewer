@@ -699,8 +699,18 @@ object Parser {
         val allCommentsClass = parseBody.getElementById("comment-start")
 
         buildList {
-            allCommentsClass?.children()?.chunked(5)?.forEach { elements ->
-                this += Element("div").apply { appendChildren(elements) }
+            var currentGroup = mutableListOf<Element>() // 临时存储当前评论的元素
+            allCommentsClass?.children()?.forEach { element ->
+                currentGroup.add(element)
+                // 遇到<br>标签时，当前评论结束，封装为div加入列表
+                if (element.tagName() == "br") {
+                    this += Element("div").apply { appendChildren(currentGroup) }
+                    currentGroup = mutableListOf() // 重置分组
+                }
+            }
+            // 处理最后一条(无<br>)结尾的评论
+            if (currentGroup.isNotEmpty()) {
+                this += Element("div").apply { appendChildren(currentGroup) }
             }
         }.forEach { child: Element ->
             val avatarUrl = child.selectFirst("img")?.absUrl("src")
