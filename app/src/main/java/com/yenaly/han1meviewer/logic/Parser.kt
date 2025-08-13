@@ -695,8 +695,16 @@ object Parser {
         val allCommentsClass = parseBody.getElementById("comment-start")
 
         buildList {
-            allCommentsClass?.children()?.chunked(5)?.forEach { elements ->
-                this += Element("div").apply { appendChildren(elements) }
+            var currentGroup = mutableListOf<Element>()
+            allCommentsClass?.children()?.forEach { element ->
+                currentGroup.add(element)
+                if (element.tagName() == "br") {
+                    this += Element("div").apply { appendChildren(currentGroup) }
+                    currentGroup = mutableListOf()
+                }
+            }
+            if (currentGroup.isNotEmpty()) {
+                this += Element("div").apply { appendChildren(currentGroup) }
             }
         }.forEach { child: Element ->
             val avatarUrl = child.selectFirst("img")?.absUrl("src")
