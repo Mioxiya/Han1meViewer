@@ -2,7 +2,9 @@
 
 项目fork自[YenalyLiew/Han1meViewer](https://github.com/YenalyLiew/Han1meViewer)
 
-用于学习与参考安卓开发，往后会持续维护该项目，有bug或需求可以提issue，本人会尽力解决
+由于开发新项目，暂时停止对该项目维护，
+推荐使用隔壁的https://github.com/misaka10032w/Han1meViewer
+功能更完善，更新更迅速
 
 ![Han1meViewer](https://socialify.git.ci/YenalyLiew/Han1meViewer/image?description=1&font=KoHo&forks=1&issues=1&language=1&logo=https%3A%2F%2Fgithub.com%2FYenalyLiew%2FHan1meViewer%2Fblob%2Fmaster%2Ficon%2Ficon_han1me_viewer-rurires.png%3Fraw%3Dtrue&name=1&owner=1&pattern=Plus&pulls=1&stargazers=1&theme=Dark)
 
